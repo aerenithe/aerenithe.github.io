@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GPA Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        label, input {
+            display: block;
+            margin: 10px 0;
+        }
+        button {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>GPA Calculator</h1>
+    <form id="gpaForm">
+        <label for="currentGpa">Current GPA:</label>
+        <input type="number" id="currentGpa" name="currentGpa" step="0.01" min="0" max="4.0" required>
+
+        <label for="completedCredits">Completed Credits:</label>
+        <input type="number" id="completedCredits" name="completedCredits" min="0" required>
+
+        <label for="targetGpa">Target GPA:</label>
+        <input type="number" id="targetGpa" name="targetGpa" step="0.01" min="0" max="4.0" required>
+
+        <label for="additionalCredits">Additional Credits:</label>
+        <input type="number" id="additionalCredits" name="additionalCredits" min="0" required>
+
+        <button type="button" onclick="calculateRequiredGpa()">Calculate Required GPA</button>
+    </form>
+
+    <h2 id="result"></h2>
+
+    <script>
+        function calculateRequiredGpa() {
+            const currentGpa = parseFloat(document.getElementById('currentGpa').value);
+            const completedCredits = parseFloat(document.getElementById('completedCredits').value);
+            const targetGpa = parseFloat(document.getElementById('targetGpa').value);
+            const additionalCredits = parseFloat(document.getElementById('additionalCredits').value);
+
+            if (isNaN(currentGpa) || isNaN(completedCredits) || isNaN(targetGpa) || isNaN(additionalCredits)) {
+                alert("Please fill in all fields with valid numbers.");
+                return;
+            }
+
+            const totalCredits = completedCredits + additionalCredits;
+            const totalCurrentPoints = currentGpa * completedCredits;
+            const requiredPoints = targetGpa * totalCredits;
+            const requiredGpaForNewCredits = (requiredPoints - totalCurrentPoints) / additionalCredits;
+
+            const resultElement = document.getElementById('result');
+            if (requiredGpaForNewCredits > 4.0) {
+                resultElement.innerText = "It is not possible to reach the target GPA with the given parameters.";
+            } else {
+                resultElement.innerText = `You need a GPA of ${requiredGpaForNewCredits.toFixed(2)} in the additional ${additionalCredits} credits to reach the target GPA of ${targetGpa}.`;
+            }
+        }
+    </script>
+</body>
+</html>
